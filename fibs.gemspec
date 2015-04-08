@@ -6,13 +6,12 @@ Gem::Specification.new do |s|
   s.summary = "Sample Jruby Extension"
   s.author  = "Chamila Wijayarathna"
 
-  files = Dir.glob("ext/**/*.{c,rb}") +
+  files = Dir.glob("ext/**/*.{c,java,rb}") +
           Dir.glob("lib/**/*.rb") + 
 	  Dir.glob("src/**/*.{java}")
 
   if RUBY_PLATFORM =~ /java/
     s.platform = "java"
-    files << "lib/fibs.jar"
   else
     s.extensions << "ext/faye_websocket/extconf.rb"
   end
