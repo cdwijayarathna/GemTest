@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
 
   if RUBY_PLATFORM =~ /java/
     s.platform = "java"
+    files << "lib/fibs.jar"
   else
     s.extensions << "ext/faye_websocket/extconf.rb"
   end

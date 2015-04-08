@@ -1,7 +1,6 @@
 require File.expand_path('../fibs', __FILE__)
 
-module Faye
-  module WebSocket
+module Fibs
 
     if RUBY_PLATFORM =~ /java/
       require 'jruby'
@@ -13,5 +12,4 @@ module Faye
       end
     end
 
-  end
-end
+ end
