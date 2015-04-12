@@ -7,6 +7,7 @@ import org.jruby.RubyArray;
 import org.jruby.RubyClass;
 import org.jruby.RubyModule;
 import org.jruby.RubyObject;
+import org.jruby.RubyFixnum;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.runtime.ObjectAllocator;
 import org.jruby.runtime.ThreadContext;
@@ -20,19 +21,19 @@ public class FibService implements BasicLibraryService {
 	@Override
 	public boolean basicLoad(Ruby runtime) throws IOException {
 		this.runtime = runtime;
-		 	RubyModule mSequence = runtime.defineModule("Sequence");
+		 	RubyModule mSequence = runtime.defineModule("Fibs");
 		 	RubyClass webSocket = mSequence.defineClassUnder("SequenceMask", runtime.getObject(), new ObjectAllocator() {
 		 	      public IRubyObject allocate(Ruby runtime, RubyClass rubyClass) {
-		 	        return new Sequence(runtime, rubyClass);
+		 	        return new Fibs(runtime, rubyClass);
 		 	      }
 		 	    });
 
-		 	    webSocket.defineAnnotatedMethods(Sequence.class);
+		 	    webSocket.defineAnnotatedMethods(Fibs.class);
 		return false;
 	}
 	
-	public class Sequence extends RubyObject {
-	    public Sequence(final Ruby runtime, RubyClass rubyClass) {
+	public class Fibs extends RubyObject {
+	    public Fibs(final Ruby runtime, RubyClass rubyClass) {
 	      super(runtime, rubyClass);
 	    }
 
@@ -55,6 +56,18 @@ public class FibService implements BasicLibraryService {
 	        unmasked.set(i, p ^ m);
 	      }
 	      return unmasked;
+	    }
+
+	    @JRubyMethod
+		private IRubyObject seq(int a1, int a2, RubyModule module, IRubyObject[] args) {
+	       Ruby runtime = module.getRuntime();
+	       int to = 20;
+	       	       IRubyObject[] seqArgs = new IRubyObject[3];
+	       seqArgs[0] = runtime.newFixnum(a1);
+	       seqArgs[1] = runtime.newFixnum(a2);
+	       seqArgs[2] = runtime.getClass("Range").callMethod("new",
+	               new IRubyObject[]{RubyFixnum.one(runtime),runtime.newFixnum(to)});
+	       return module.getClass("Sequence").callMethod("new",seqArgs);
 	    }
 	  }
 

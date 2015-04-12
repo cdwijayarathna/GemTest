@@ -1,15 +1,10 @@
-require File.expand_path('../fibs', __FILE__)
-
 module Fibs
-
     if RUBY_PLATFORM =~ /java/
-      require 'jruby'
-      fibs.FibService.new.basicLoad(JRuby.runtime)
+      require File.expand_path('../fibs.jar', __FILE__)
 
       def self.mask(*args)
-        @mask ||= SequenceMask.new
+        @mask ||= Sequence.new
         @mask.mask(*args)
       end
     end
-
  end
