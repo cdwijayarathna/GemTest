@@ -31,9 +31,8 @@ public class FibsLibrary implements Library {
     public void load(Ruby runtime, boolean wrap) throws IOException {
         // only used for RefError
         RubyKernel.require(runtime.getKernel(), runtime.newString("weakref"), Block.NULL_BLOCK);
-
         RubyModule fibsModule = runtime.getOrCreateModule("Fibs");
-       
+        fibsModule.defineAnnotatedMethods(Fibs.class);
 
         RubyClass sequenceClass = runtime.defineClassUnder("Sequence", runtime.getObject(), SEQUENCE_ALLOCATOR, fibsModule);
         sequenceClass.defineAnnotatedMethods(Sequence.class);
@@ -47,6 +46,12 @@ public class FibsLibrary implements Library {
 
     @JRubyClass(name="Sequence", parent="Object")
     public static class Sequence extends RubyObject {
+
+	@JRubyMethod(meta=true)
+        public static IRubyObject add(ThreadContext context, IRubyObject self, IRubyObject a, IRubyObject b) {
+             return JavaEmbedUtils.javaToRuby(context.runtime,a.convertToInteger().getLongValue()+b.convertToInteger().getLongValue());
+        }
+
         private final ReferenceQueue queue;
 	Ruby runtime;
         public Sequence(Ruby runtime, RubyClass klass) {
